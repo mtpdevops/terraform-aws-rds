@@ -1,6 +1,7 @@
 locals {
   enhanced_monitoring_iam_role_name   = element(concat(aws_iam_role.enhanced_monitoring.*.name, [""]), 0)
   enhanced_monitoring_iam_role_arn    = element(concat(aws_iam_role.enhanced_monitoring.*.arn, [""]), 0)
+  this_db_instance                    = merge(aws_db_instance.this_mssql, aws_db_instance.this)
   this_db_instance_address            = element(concat(aws_db_instance.this_mssql.*.address, aws_db_instance.this.*.address, [""]), 0)
   this_db_instance_arn                = element(concat(aws_db_instance.this_mssql.*.arn, aws_db_instance.this.*.arn, [""]), 0)
   this_db_instance_availability_zone  = element(concat(aws_db_instance.this_mssql.*.availability_zone, aws_db_instance.this.*.availability_zone, [""]), 0)
@@ -13,6 +14,11 @@ locals {
   this_db_instance_username           = element(concat(aws_db_instance.this_mssql.*.username, aws_db_instance.this.*.username, [""]), 0)
   this_db_instance_port               = element(concat(aws_db_instance.this_mssql.*.port, aws_db_instance.this.*.port, [""]), 0)
   this_db_instance_ca_cert_identifier = element(concat(aws_db_instance.this_mssql.*.ca_cert_identifier, aws_db_instance.this.*.ca_cert_identifier, [""]), 0)
+}
+
+output "this_db_instance" {
+  description = "The RDS resource"
+  value       = local.this_db_instance
 }
 
 output "enhanced_monitoring_iam_role_name" {
