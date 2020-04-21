@@ -1,7 +1,7 @@
 locals {
   enhanced_monitoring_iam_role_name   = element(concat(aws_iam_role.enhanced_monitoring.*.name, [""]), 0)
   enhanced_monitoring_iam_role_arn    = element(concat(aws_iam_role.enhanced_monitoring.*.arn, [""]), 0)
-  this_db_instance                    = merge(aws_db_instance.this_mssql, aws_db_instance.this)
+  this_db_instance_postgres           = aws_db_instance.this
   this_db_instance_address            = element(concat(aws_db_instance.this_mssql.*.address, aws_db_instance.this.*.address, [""]), 0)
   this_db_instance_arn                = element(concat(aws_db_instance.this_mssql.*.arn, aws_db_instance.this.*.arn, [""]), 0)
   this_db_instance_availability_zone  = element(concat(aws_db_instance.this_mssql.*.availability_zone, aws_db_instance.this.*.availability_zone, [""]), 0)
@@ -18,7 +18,7 @@ locals {
 
 output "this_db_instance" {
   description = "The RDS resource"
-  value       = local.this_db_instance
+  value       = local.this_db_instance_postgres
 }
 
 output "enhanced_monitoring_iam_role_name" {
